@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+
 
 
 import numpy as np
@@ -9,13 +9,12 @@ import matplotlib.pyplot as plt
 from scipy import linalg
 from abc import ABC, abstractmethod
 from functools import lru_cache, cached_property
-
 from typing import List
 
 
 # ## Define collocation
 
-# In[2]:
+
 
 
 class Collocation:
@@ -27,7 +26,7 @@ class Collocation:
         return self.__n
 
 
-# In[3]:
+
 
 
 class Collocation2D(Collocation):
@@ -45,7 +44,7 @@ class Collocation2D(Collocation):
         return self.__thetas_closed
 
 
-# In[4]:
+
 
 
 class Collocation3D(Collocation):
@@ -78,7 +77,7 @@ class Collocation3D(Collocation):
 
 # ## Define boundaries
 
-# In[5]:
+
 
 
 class Boundary:  
@@ -117,7 +116,7 @@ class Boundary:
 
 # ### Two-dimensional
 
-# In[6]:
+
 
 
 class Circle(Boundary):
@@ -129,7 +128,7 @@ class Circle(Boundary):
         return super().circleCollocation * self.__radius  
 
 
-# In[7]:
+
 
 
 class StarLikeCurve(Boundary):
@@ -142,7 +141,7 @@ class StarLikeCurve(Boundary):
 
 # ### Three-dimensional
 
-# In[8]:
+
 
 
 class Sphere(Boundary):
@@ -157,7 +156,7 @@ class Sphere(Boundary):
         return super().sphereCollocation * self.__radius
 
 
-# In[9]:
+
 
 
 class StarLikeSurface(Boundary):
@@ -173,20 +172,20 @@ class StarLikeSurface(Boundary):
 
 # ## Boundary condition
 
-# In[10]:
+
 
 
 class BoundaryCondition:
     def __init__(self, func):
         self.__func = func
         
-    def __call__(self,X: np.array):
+    def __call__(self, X: np.array):
         return self.__func(X)
 
 
 # ## Method of fundamental solutions (MFS) helper abstract
 
-# In[11]:
+
 
 
 class MFSHelper(ABC):
@@ -259,7 +258,7 @@ class MFSHelper(ABC):
         '''
         return np.tile(X.reshape(self.__ndim,self.n,1),self.n)
     '''
-    Abstract function ( for 2D and 3D problems)
+    Abstract methods ( for 2D and 3D problems)
     '''
     @abstractmethod
     def module(self, X: np.ndarray,Y: np.ndarray) -> np.ndarray:
@@ -338,7 +337,7 @@ class MFSHelper(ABC):
 
 # ### Helper for 3D problem
 
-# In[12]:
+
 
 
 class MFSHelper3D(MFSHelper):
@@ -347,7 +346,7 @@ class MFSHelper3D(MFSHelper):
                  g2Boundary:  Boundary,
                  g1DirichletCondition: BoundaryCondition,
                  g2NeumanCondition: BoundaryCondition):
-        MFSHelper.__init__(self, 3,collocation,g2Boundary,g1DirichletCondition,g2NeumanCondition)
+        super().__init__(3,collocation,g2Boundary,g1DirichletCondition,g2NeumanCondition)
         self.__unit_sphere = Sphere(collocation, 1.0)
     '''
     Override
@@ -370,7 +369,7 @@ class MFSHelper3D(MFSHelper):
 
 # ### Helper for 2D problem
 
-# In[13]:
+
 
 
 class MFSHelper2D(MFSHelper):
@@ -379,7 +378,7 @@ class MFSHelper2D(MFSHelper):
                  g2Boundary:  Boundary,
                  g1DirichletCondition: BoundaryCondition,
                  g2NeumanCondition: BoundaryCondition):
-        MFSHelper.__init__(self, 2,collocation,g2Boundary,g1DirichletCondition,g2NeumanCondition)
+        super().__init__(2,collocation,g2Boundary,g1DirichletCondition,g2NeumanCondition)
         self.__unit_circle = Circle(collocation, 1.0)
     '''
     Override
