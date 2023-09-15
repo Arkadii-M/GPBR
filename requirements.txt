@@ -1,0 +1,6 @@
+deap
+numpy
+scipy
+matplotlib
+typing
+ipympl
